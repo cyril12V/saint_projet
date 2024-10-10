@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Saints</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+            color: #b50000;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .saints-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .saint-card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .saint-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-color: #b50000;
+        }
+        a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            color: #b50000;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .saint-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Liste des Saints</h1>
+    <div class="saints-container" id="saints-container">
+        <!-- Les blocs des saints seront générés ici par JavaScript -->
+    </div>
+
+    <script>
+        // Liste des saints avec leurs noms et dates
+        // List of Coptic Saints with correct names and dates
+        const saints = [
+  { name: 'Saint Marc', date: '08-05-2023' }, 
+  { name: 'Saint George', date: '01-05-2023' },
+  { name: 'Saint Mina', date: '24-11-2023' },
+  { name: 'Saint Antoine', date: '30-01-2023' },
+  { name: 'Saint Athanase', date: '15-05-2023' },
+  { name: 'Saint Bishoy', date: '15-07-2023' },
+  { name: 'Saint Samuel', date: '17-12-2023' },
+  { name: 'Saint Moise le Noir', date: '01-07-2023' },
+  { name: 'Saint Shenouda', date: '14-07-2023' },
+  { name: 'Saint Cyril', date: '10-07-2023' },
+  // Continue with your other Coptic saints...
+];
+
+        const saintsContainer = document.getElementById('saints-container');
+
+        // Fonction pour afficher les saints sous forme de blocs cliquables
+        function displaySaints() {
+            saints.forEach(saint => {
+                const div = document.createElement('div');
+                div.className = 'saint-card';
+                div.innerHTML = `<a href="/saint/${encodeURIComponent(saint.name)}">${saint.name}</a>`;
+                saintsContainer.appendChild(div);
+            });
+        }
+
+        // Afficher les saints lors du chargement de la page
+        displaySaints();
+    </script>
+</body>
+</html>

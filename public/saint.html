@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saint Details</title>
+    <style>
+         body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #b50000; /* Couleur rouge */
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+        .content {
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        p {
+            line-height: 1.8;
+            text-align: justify;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .loading {
+            font-size: 1.3rem;
+            text-align: center;
+            color: #888;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .back-btn, .social-btn {
+            display: inline-block;
+            background-color: #b50000;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1rem;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .back-btn:hover, .social-btn:hover {
+            background-color: #930000;
+        }
+        .social-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .social-container span {
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #b50000;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2.4rem;
+            }
+            .back-btn, .social-btn {
+                font-size: 0.9rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 id="saint-name">Nom du Saint</h1>
+    <div id="saint-details" class="content">Chargement de l'histoire...</div>
+
+    <!-- Bouton pour revenir à la liste des saints -->
+    <div style="text-align: center;">
+        <a href="/index.html" class="back-btn">Retour à la liste</a>
+    </div>
+
+    <!-- Partage sur les réseaux sociaux -->
+    <div class="social-container">
+        <span>Partager :</span>
+        <a href="#" id="share-facebook" class="social-btn">Facebook</a>
+        <a href="#" id="share-twitter" class="social-btn">Twitter</a>
+        <a href="#" id="share-whatsapp" class="social-btn">WhatsApp</a>
+    </div>
+
+    <script>
+        const saintName = decodeURIComponent(window.location.pathname.split('/').pop());
+        const saintDetails = document.getElementById('saint-details');
+
+        // Mettre à jour le nom du saint
+        document.getElementById('saint-name').innerText = saintName;
+
+        // Afficher une animation de chargement
+        saintDetails.innerHTML = '<div class="loading">Chargement de l\'histoire...</div>';
+
+        // Appel de l'API pour récupérer l'histoire du saint
+        fetch(`/api/saint/${encodeURIComponent(saintName)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur API : ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (typeof data === 'string' && data.trim() === '') {
+                    throw new Error('Histoire non disponible');
+                }
+                // Mettre à jour le contenu une fois chargé
+                saintDetails.innerHTML = data;
+                saintDetails.classList.add('visible'); // Ajouter l'animation d'apparition
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des données :', error);
+                saintDetails.innerHTML = `<p class="error">Erreur lors de la récupération de l'histoire : ${error.message}</p>`;
+            });
+
+        // Fonctionnalité de partage sur les réseaux sociaux
+        const currentUrl = window.location.href;
+
+        document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+        document.getElementById('share-twitter').href = `https://twitter.com/share?url=${encodeURIComponent(currentUrl)}&text=Découvrez l'histoire de ${saintName}`;
+        document.getElementById('share-whatsapp').href = `https://api.whatsapp.com/send?text=Découvrez l'histoire de ${saintName} : ${encodeURIComponent(currentUrl)}`;
+    </script>
+</body>
+</html>
