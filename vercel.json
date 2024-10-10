@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/saint/:name",
+      "destination": "/api/saint/:name"
+    }
+  ]
+}
